@@ -1,0 +1,27 @@
+clf
+%Defining the DH parameters
+ rev1 = Revolute('d', 26.45, 'a',     0, 'alpha',     pi/2);
+ rev2 = Revolute('d',     -9.2, 'a',    17, 'alpha',         0);
+ rev3 = Revolute('d',   3.7, 'a',     17, 'alpha',     pi/2);
+ rev4 = Revolute('d', 17.05, 'a',     0, 'alpha',      pi/2);
+ rev5 = Revolute('d',     0, 'a',     0, 'alpha',     -pi/2);
+ rev6 = Revolute('d',     2.2, 'a',     0, 'alpha',         0);
+%defining the joint matrices
+joints = [rev1, rev2, rev3, rev4, rev5, rev6];
+robo = SerialLink(joints)
+% r.plot([0, 0, 0, 0, 0, 0, 0, 0])
+% r.teach(joints)
+
+%starting point
+A = [10, 10, 10]; 
+%end point
+B = [ 32, 10, 30];
+%gives translations happening at every point
+T1 = transl(A); 
+T2 = transl(B);
+%Put the obtained values into matrix
+T = ctraj(T1,T2,20);
+%Perform ikine function from robotics toolbox
+q = robo.ikine(T);
+robo.name('PUMA')
+robo.plot(q);
